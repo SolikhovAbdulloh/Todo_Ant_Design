@@ -112,7 +112,7 @@ function App() {
             <div key={value.id} className="flex gap-2">
               <Input
                 type="text"
-                value={newIsm}
+                value={value.ism}
                 onChange={(e) => setNewIsm(e.target.value)}
               />
               <Button
