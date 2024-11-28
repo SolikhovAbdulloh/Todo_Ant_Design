@@ -1,9 +1,27 @@
 import { Div } from "../style";
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input,notification } from "antd";
 import { useReducer, useState } from "react";
 const { Search } = Input;
-
+import { CloseCircleTwoTone, InfoCircleTwoTone, LikeTwoTone, SmileOutlined } from "@ant-design/icons";
 function App() {
+  const notify = () =>{
+    notification.open({
+      message:"Malumot qo'shildi",
+      icon:  <LikeTwoTone style={{ color: '#108ee9' }} />,
+    })
+  }
+    const notifyDelete = () => {
+      notification.error({
+        message: "Malumot Ochirildi",
+        icon: <CloseCircleTwoTone style={{ color: "red" }} />,
+      });
+    };
+     const notifyUpdate = () => {
+       notification.info({
+         message: "Malumot Yangilandi",
+         icon: <InfoCircleTwoTone style={{ color: "red" }} />,
+       });
+     };
   const [search, setSearch] = useState("");
   const [form] = Form.useForm(); 
   const reducer = (state, { type, newtext }) => {
@@ -41,10 +59,12 @@ function App() {
   const Update = (id) => {
     const newtext = { id, ism: newIsm };
     dispatch({ type: "edit", newtext  });
+    notifyUpdate()
   };
 
   const deleteItem = (id) => {
     dispatch({ type: "delete", newtext: { id } });
+    notifyDelete()
   };
 const filtered = state.filter((value) =>
   value.ism.toLowerCase().includes(search.toLowerCase())
@@ -70,7 +90,12 @@ const filtered = state.filter((value) =>
             placeholder="So'z kiriting"
           />
         </Form.Item>
-        <Button type="primary" htmlType="submit" className="h-[40px]">
+        <Button
+          type="primary"
+          onClick={notify}
+          htmlType="submit"
+          className="h-[40px]"
+        >
           Add
         </Button>
       </Form>
@@ -78,7 +103,6 @@ const filtered = state.filter((value) =>
       <div>
         {filtered.map((value) => (
           <div key={value.id} className="flex gap-2">
-            
             <p>{value.ism}</p>
             <Input
               type="text"
@@ -87,7 +111,8 @@ const filtered = state.filter((value) =>
             />
             <Button
               type="dashed"
-              onClick={() => Update(value.id)}
+              onClick={() => Update(value.id)
+                }
               color="danger"
               className="h-[40px]"
             >
